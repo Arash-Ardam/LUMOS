@@ -22,7 +22,7 @@ module Fixed_Point_Unit_Testbench;
 
     wire [31 : 0] fpu_result;
     wire fpu_ready;
-
+    
     Fixed_Point_Unit 
     #(
         .WIDTH(32),
