@@ -337,16 +337,16 @@ The code consists of two main sections: initialization and the loop. Below is a 
 ### Initialization Section
 
 1. Setting Stack Pointer
-   ```Assembly
+   ``` Assembly
    li sp, 0x3C00
    ```
    - li (load immediate) instruction loads the immediate value 0x3C00 into the stack pointer (sp).
    - This sets the initial address of the stack to 0x3C00.
 
 2. Setting Global Pointer
-   
+    ``` Assembly
    addi gp, sp, 392
-   
+   ```
    - addi (add immediate) instruction adds the immediate value 392 to the current value of sp and stores the result in the global pointer (gp).
    - This sets the global pointer to 0x3D88 (0x3C00 + 392).
 
@@ -355,61 +355,67 @@ The code consists of two main sections: initialization and the loop. Below is a 
 The loop begins at the label loop and includes several floating-point operations as well as loop control instructions.
 
 3. Load Floating-Point Values
-   
+    ``` Assembly
    flw f1, 0(sp)
    flw f2, 4(sp)
-   
+   ```
    - flw (floating-point load word) instructions load a 32-bit floating-point value from the memory address pointed to by sp and sp + 4 into the registers f1 and f2 respectively.
    - This means the code is loading two consecutive floating-point values from the stack into f1 and f2.
 
 4. Floating-Point Multiplications
-   
+   ``` Assembly
    fmul.s f10, f1, f1
    fmul.s f20, f2, f2
-   
+   ```
+
    - fmul.s (floating-point multiply single-precision) instructions perform single-precision floating-point multiplication.
    - The first instruction squares the value in f1 and stores the result in f10.
    - The second instruction squares the value in f2 and stores the result in f20.
 
 5. Floating-Point Addition
-   
+   ``` Assembly
    fadd.s f30, f10, f20
-   
+   ```
+
    - fadd.s (floating-point add single-precision) instruction adds the values in f10 and f20 and stores the result in f30.
    - This effectively sums the squares of f1 and f2.
 
 6. Square Root Calculation
-   
+    ``` Assembly
    fsqrt.s x3, f30
-   
+   ```
+
    - fsqrt.s (floating-point square root single-precision) instruction calculates the square root of the value in f30 and stores the result in x3.
 
 7. Accumulating Result
-   
+    ``` Assembly
    fadd.s f0, f0, f3
-   
+   ```
+
    - fadd.s instruction adds the value in f3 to f0 and stores the result back in f0.
    - This accumulates the results of the square root operations in f0.
 
 8. Updating Stack Pointer
-   
+    ``` Assembly
    addi sp, sp, 8
-   
+   ```
+
    - addi instruction increments the stack pointer (sp) by 8.
    - This moves the stack pointer to the next pair of floating-point values in memory.
 
 9. Loop Control
-   
+    ``` Assembly
    blt sp, gp, loop
-   
+   ```
+
    - blt (branch if less than) instruction compares sp and gp.
    - If sp is less than gp, the code branches back to the label loop.
    - This creates a loop that continues as long as sp is less than gp.
 
 10. Breakpoint
-    
+    ``` Assembly
     ebreak
-    
+    ```
     - ebreak (environment break) instruction causes the program to halt, often used for debugging purposes.
 
 ## Summary
